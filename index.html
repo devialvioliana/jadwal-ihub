@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Proposal Jadwal — Innovation Hub Surabaya & Semarang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F4F7; --surface:#FFFFFF; --surface-2:#F7F8FA; --ink:#1C2230; --muted:#5E6677; --line:#DDE0E7;
+  --sby:#5B3F99; --sby-soft:#EEE9F8; --smg:#C77A22; --smg-soft:#FBF0E2; --travel:#2F6F8F; --travel-soft:#E5F0F5;
+  --ok:#2E8B57; --ok-soft:#E3F3EA; --warn:#B7791F; --warn-soft:#FDF3DC; --err:#C2352B; --err-soft:#FBE6E4;
+  --chip:#EDEFF3; --focus:#1F5FD1;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#14171D; --surface:#1C2028; --surface-2:#222731; --ink:#E8EAF0; --muted:#9AA2B2; --line:#323846;
+    --sby:#B79CF0; --sby-soft:#2A2440; --smg:#E9A85C; --smg-soft:#3A2C1A; --travel:#7FC0DE; --travel-soft:#1B3039;
+    --ok:#5CC48A; --ok-soft:#1C3328; --warn:#E5B45A; --warn-soft:#3A2F17; --err:#F0776C; --err-soft:#3D1F1D; --chip:#2A303B; --focus:#7AA7FF;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#14171D; --surface:#1C2028; --surface-2:#222731; --ink:#E8EAF0; --muted:#9AA2B2; --line:#323846;
+  --sby:#B79CF0; --sby-soft:#2A2440; --smg:#E9A85C; --smg-soft:#3A2C1A; --travel:#7FC0DE; --travel-soft:#1B3039;
+  --ok:#5CC48A; --ok-soft:#1C3328; --warn:#E5B45A; --warn-soft:#3A2F17; --err:#F0776C; --err-soft:#3D1F1D; --chip:#2A303B; --focus:#7AA7FF;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.5;font-variant-numeric:tabular-nums}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.wrap{max-width:1320px;margin:0 auto;padding:28px 20px 60px}
+header.top{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end;margin-bottom:22px}
+h1{font-size:clamp(26px,3.6vw,40px);line-height:1.08;margin:0;font-weight:800;letter-spacing:-.02em;max-width:22ch}
+.sub{color:var(--muted);margin:10px 0 0;max-width:64ch}
+.route{display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;flex-wrap:wrap}
+.route span{padding:4px 10px;border-radius:999px}
+.route .c-jkt{background:var(--chip)} .route .c-sby{background:var(--sby-soft);color:var(--sby)} .route .c-smg{background:var(--smg-soft);color:var(--smg)}
+.route i{font-style:normal;color:var(--muted)}
+
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:18px 0 14px}
+.seg{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{border:0;background:transparent;padding:7px 14px;border-radius:7px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.btn{border:1px solid var(--line);background:var(--surface);padding:7px 13px;border-radius:9px;font-weight:600;font-size:14px}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.danger{color:var(--err)}
+.spacer{flex:1}
+
+.pitch{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.panel h2{font-size:17px;margin:0 0 10px;font-weight:700}
+.panel h3{font-size:14px;margin:14px 0 6px;font-weight:700}
+.changes{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.changes li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start}
+.tag{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:6px;white-space:nowrap}
+.tag.moved{background:var(--travel-soft);color:var(--travel)} .tag.edit{background:var(--warn-soft);color:var(--warn)}
+.tag.del{background:var(--err-soft);color:var(--err)} .tag.new{background:var(--ok-soft);color:var(--ok)}
+.why{margin:12px 0 0;padding:0 0 0 18px;color:var(--ink)} .why li{margin:4px 0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.stat{background:var(--surface-2);border-radius:10px;padding:10px 12px}
+.stat b{display:block;font-size:22px;line-height:1.1}
+.stat span{font-size:12.5px;color:var(--muted)}
+.stat.alert b{color:var(--err)}
+.muted{color:var(--muted)}
+
+/* Board */
+.board-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.board{display:grid;grid-template-columns:132px repeat(6,minmax(168px,1fr));min-width:1150px}
+.cell{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px;min-height:64px;position:relative}
+.cell:nth-child(7n){border-right:0}
+.hd{background:var(--surface-2);font-weight:700;font-size:14px;min-height:auto;padding:10px;position:sticky;top:0}
+.hd small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.hd.hl{box-shadow:inset 0 -3px 0 var(--focus)}
+.rowlab{font-size:12.5px;font-weight:600;padding:8px 10px;display:flex;flex-direction:column;justify-content:flex-start;border-left:6px solid transparent}
+.rowlab small{font-weight:500;color:var(--muted)}
+.rowlab.sby{border-left-color:var(--sby);background:var(--sby-soft);color:var(--sby)}
+.rowlab.smg{border-left-color:var(--smg);background:var(--smg-soft);color:var(--smg)}
+.rowlab.tr{border-left-color:var(--travel);background:var(--travel-soft);color:var(--travel)}
+.rowlab .city{font-weight:800;font-size:13.5px}
+.slot.empty-click{cursor:pointer}
+.slot.empty-click:hover{background:var(--surface-2)}
+.slot.empty-click:hover::after{content:"+ meeting";position:absolute;inset:auto 8px 6px auto;font-size:12px;color:var(--muted)}
+.day-hl{background:color-mix(in srgb,var(--focus) 5%,transparent)}
+
+.mt{display:block;width:100%;text-align:left;border:1px solid var(--line);border-left:4px solid var(--ok);background:var(--surface);border-radius:8px;padding:7px 9px;margin:0 0 6px;font-size:13px;line-height:1.35}
+.mt.yellow{border-left-color:#E0B400}
+.mt:hover{border-color:var(--muted)}
+.mt .nm{font-weight:700;display:block}
+.mt .tm{font-size:11.5px;color:var(--muted)}
+.mt .pp{display:flex;flex-wrap:wrap;gap:3px;margin-top:5px}
+.pc{font-size:11px;padding:1px 6px;border-radius:5px;background:var(--chip);font-weight:600}
+.pc.x{background:var(--err-soft);color:var(--err)}
+.pc.on{background:var(--ink);color:var(--bg)}
+.mt .flags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.mt.conf{border-color:var(--err);box-shadow:0 0 0 1px var(--err) inset}
+.mt.dim{opacity:.28}
+.leg{display:block;width:100%;text-align:left;border:1px dashed var(--travel);background:var(--travel-soft);color:var(--ink);border-radius:8px;padding:6px 8px;margin:0 0 6px;font-size:12.5px;line-height:1.35}
+.leg b{color:var(--travel)}
+.leg:hover{border-style:solid}
+.addleg{display:block;width:100%;border:1px dashed var(--line);background:transparent;color:var(--muted);border-radius:8px;padding:5px 8px;font-size:12.5px;font-weight:600;text-align:left}
+.addleg:hover{border-color:var(--travel);color:var(--travel);background:var(--travel-soft)}
+.mt.cont{border-left-style:dashed;opacity:.85}
+.src.st-booked{background:var(--travel-soft);color:var(--travel)} .src.st-issued{background:var(--ok-soft);color:var(--ok)}
+.btn.sm{padding:3px 9px;font-size:12.5px}
+.leg.dim{opacity:.28}
+
+/* Lower panels */
+.lower{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;margin-top:18px}
+.issues{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+.issue{border-radius:10px;padding:10px 12px;border:1px solid var(--line)}
+.issue.err{background:var(--err-soft);border-color:transparent}
+.issue.warn{background:var(--warn-soft);border-color:transparent}
+.issue.info{background:var(--surface-2)}
+.issue .t{font-weight:700;font-size:13.5px}
+.issue .d{font-size:13.5px;margin-top:2px}
+.issue .fx{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.issue .fx button{font-size:12.5px;padding:4px 9px;border-radius:7px;border:1px solid var(--line);background:var(--surface);font-weight:600}
+.ok-msg{color:var(--ok);font-weight:600}
+.people{display:flex;flex-wrap:wrap;gap:6px}
+.person{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:600}
+.person[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.person small{font-weight:500;opacity:.7;margin-left:3px}
+.person.ext{border-style:dashed}
+.itin{margin-top:12px;display:grid;gap:6px}
+.itin .day{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:7px 0;border-top:1px solid var(--line);font-size:13.5px}
+.itin .day b{font-size:13px}
+.loc{font-size:11.5px;font-weight:700;padding:1px 7px;border-radius:5px}
+.loc.sby{background:var(--sby-soft);color:var(--sby)} .loc.smg{background:var(--smg-soft);color:var(--smg)} .loc.jkt{background:var(--chip)}
+table.legs{width:100%;border-collapse:collapse;font-size:13.5px}
+table.legs th{text-align:left;font-size:12px;color:var(--muted);font-weight:600;padding:6px 6px;border-bottom:1px solid var(--line)}
+table.legs td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+table.legs select{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:3px 5px;font-size:13px}
+.tblwrap{overflow-x:auto}
+.src{font-size:11px;font-weight:700;padding:1px 6px;border-radius:5px;background:var(--chip);color:var(--muted)}
+.src.prop{background:var(--warn-soft);color:var(--warn)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin:10px 2px 0}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.full{grid-column:1/-1}
+.concl{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px 24px}
+.concl h3{margin:6px 0 6px;font-size:14px}
+.concl ul{margin:0;padding-left:18px;font-size:14px} .concl li{margin:4px 0}
+.concl .clean{color:var(--ok);font-weight:600}
+.qs{margin:0;padding-left:18px} .qs li{margin:5px 0}
+
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);padding:0;width:min(560px,94vw);max-height:90vh}
+dialog::backdrop{background:rgba(10,12,18,.45)}
+.dlg{padding:18px 20px;display:grid;gap:12px;overflow:auto;max-height:86vh}
+.dlg h2{margin:0;font-size:18px}
+.fld{display:grid;gap:4px;font-size:13px;font-weight:600}
+.fld input,.fld select,.fld textarea{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:7px 9px;font-weight:500}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.checks{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:4px 10px;font-weight:500}
+.checks label{display:flex;gap:6px;align-items:center;font-size:13.5px}
+.dlg .acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+textarea.out{width:100%;min-height:300px;font-size:12.5px;line-height:1.45;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--surface-2)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:10px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+.ro-note{font-size:13px;color:var(--muted)}
+
+@media (max-width:900px){
+  header.top,.pitch,.lower{grid-template-columns:1fr}
+  .row3{grid-template-columns:1fr 1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Business trip follow-up Innovation Hub</h1>
+      <p class="sub">Usulan jadwal dan tim untuk kunjungan Surabaya dan Semarang. Erella dibuat half-day di hari Kamis supaya Sidomuncul bisa meeting Kamis sore.</p>
+    </div>
+    <div class="route" aria-label="Rute perjalanan"><span class="c-jkt">Jakarta</span><i>›</i><span class="c-sby">Surabaya</span><i>›</i><span class="c-smg">Semarang</span></div>
+  </header>
+
+  <section class="pitch">
+    <div class="panel">
+      <h2 id="statTitle">Ringkasan usulan</h2>
+      <div class="stats" id="stats"></div>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <div class="seg" role="group" aria-label="Pilih versi jadwal">
+      <button data-view="current" aria-pressed="false">Plan awal (sheet)</button>
+      <button data-view="proposed" aria-pressed="true">Usulan</button>
+    </div>
+    <span class="ro-note" id="roNote"></span>
+    <span class="spacer"></span>
+    <button class="btn" id="addBtn">Tambah meeting</button>
+    <button class="btn" id="addLegTop">Tambah perjalanan</button>
+    <button class="btn" id="copyBtn">Salin ringkasan</button>
+    <button class="btn danger" id="resetBtn">Reset usulan</button>
+  </div>
+
+  <div class="board-wrap"><div class="board" id="board"></div></div>
+  <div class="legend">
+    <span><i style="background:var(--ok)"></i>Hijau di sheet</span>
+    <span><i style="background:#E0B400"></i>Kuning di sheet</span>
+    <span><i style="background:var(--err)"></i>Ada bentrok</span>
+    <span><i style="background:var(--travel)"></i>Perjalanan</span>
+    <span>Klik meeting atau perjalanan untuk mengubah. Klik sel kosong untuk tambah meeting, atau "+ Perjalanan" di baris Perjalanan.</span>
+  </div>
+
+  <section class="lower">
+    <div class="panel full">
+      <h2>Tim</h2>
+      <p class="muted" style="margin:0 0 10px;font-size:13.5px">Pilih nama untuk lihat itinerary per orang. Garis putus-putus berarti belum ada info transport di brief.</p>
+      <div class="people" id="people"></div>
+      <div class="itin" id="itin"></div>
+    </div>
+
+    <div class="panel full">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2 style="margin:0">Transport</h2><button class="btn" id="addLegBtn">Tambah perjalanan</button></div>
+      <p class="muted" style="margin:0 0 8px;font-size:13.5px">Klik "Ubah" (atau kartu perjalanan di jadwal) untuk ganti orang, rute, moda, dan isi detail seperti maskapai, nomor flight/kereta, jam, dan kode booking. Pengecekan lokasi tim langsung ikut ter-update. Label "Usulan" berarti harinya belum ditentukan di brief.</p>
+      <div class="tblwrap"><table class="legs" id="legs"></table></div>
+      <h3>Kepulangan (paling cepat, berdasarkan meeting terakhir)</h3>
+      <div class="tblwrap"><table class="legs" id="returns"></table></div>
+    </div>
+
+    <div class="panel full">
+      <h2>Kesimpulan</h2>
+      <p class="muted" style="margin:0 0 6px;font-size:13.5px">Otomatis ter-update setiap kali jadwal atau perjalanan diubah.</p>
+      <div class="concl" id="concl"></div>
+    </div>
+  </section>
+</div>
+
+<dialog id="dlg"><form class="dlg" id="mform" method="dialog">
+  <h2 id="dlgTitle">Ubah meeting</h2>
+  <label class="fld">Nama meeting / customer<input id="fName" required></label>
+  <div class="row3">
+    <label class="fld">Kota<select id="fCity"></select></label>
+    <label class="fld">Hari<select id="fDay"></select></label>
+    <label class="fld">Sesi<select id="fSlot"></select></label>
+  </div>
+  <div class="row3">
+    <label class="fld">Jam spesifik (opsional)<input id="fTime" placeholder="mis. 14:00"></label>
+    <label class="fld">Warna di sheet<select id="fStatus"><option value="green">Hijau</option><option value="yellow">Kuning</option></select></label>
+  </div>
+  <div class="fld">Tim yang join<div class="checks" id="fPeople"></div></div>
+  <label class="fld">Catatan / agenda<textarea id="fNote" rows="3"></textarea></label>
+  <div class="acts">
+    <button type="button" class="btn danger" id="delBtn">Hapus meeting</button>
+    <span class="spacer"></span>
+    <button type="button" class="btn" id="cancelBtn">Batal</button>
+    <button type="submit" class="btn primary">Simpan</button>
+  </div>
+</form></dialog>
+
+<dialog id="legDlg"><form class="dlg" id="lform" method="dialog">
+  <h2 id="legTitle">Ubah perjalanan</h2>
+  <div class="row3">
+    <label class="fld">Moda<select id="lMode"></select></label>
+    <label class="fld">Dari<select id="lFrom"></select></label>
+    <label class="fld">Ke<select id="lTo"></select></label>
+  </div>
+  <div class="row3">
+    <label class="fld">Hari<select id="lDay"></select></label>
+    <label class="fld">Waktu<select id="lTime"></select></label>
+  </div>
+  <div class="fld">Siapa yang ikut<div class="checks" id="lPeople"></div></div>
+  <h3 style="margin:4px 0 0;font-size:14px">Detail perjalanan</h3>
+  <div class="row3">
+    <label class="fld">Maskapai / operator<input id="lCarrier" placeholder="mis. Garuda, KAI"></label>
+    <label class="fld">No. flight / kereta<input id="lNumber" placeholder="mis. GA 312"></label>
+    <label class="fld">Kode booking<input id="lPnr" placeholder="opsional"></label>
+  </div>
+  <div class="row3">
+    <label class="fld">Jam berangkat<input id="lDep" type="time"></label>
+    <label class="fld">Jam tiba<input id="lArr" type="time"></label>
+    <label class="fld">Status<select id="lStatus"><option value="plan">Rencana</option><option value="booked">Sudah booking</option><option value="issued">Tiket issued</option></select></label>
+  </div>
+  <div class="row3">
+    <label class="fld">Bandara / stasiun berangkat<input id="lDepPt" placeholder="mis. CGK T3, Pasar Turi"></label>
+    <label class="fld">Bandara / stasiun tiba<input id="lArrPt" placeholder="mis. SUB, Tawang"></label>
+  </div>
+  <label class="fld">Catatan<textarea id="lNote" rows="2" placeholder="mis. bagasi, penjemputan, hotel"></textarea></label>
+  <div class="acts">
+    <button type="button" class="btn danger" id="lDel">Hapus perjalanan</button>
+    <span class="spacer"></span>
+    <button type="button" class="btn" id="lCancel">Batal</button>
+    <button type="submit" class="btn primary">Simpan</button>
+  </div>
+</form></dialog>
+
+<dialog id="copyDlg"><div class="dlg">
+  <h2>Ringkasan untuk dibagikan</h2>
+  <textarea class="out" id="copyOut" readonly></textarea>
+  <div class="acts"><button class="btn" id="copyClose">Tutup</button><button class="btn primary" id="copyDo">Salin teks</button></div>
+</div></dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const DAYS=[{id:'sun',label:'Minggu'},{id:'mon',label:'Senin'},{id:'tue',label:'Selasa'},{id:'wed',label:'Rabu'},{id:'thu',label:'Kamis'},{id:'fri',label:'Jumat'}];
+const DIDX=Object.fromEntries(DAYS.map((d,i)=>[d.id,i]));
+const SLOTS=[{id:'am',label:'Before lunch',time:'09:00–12:00',order:1,covers:['am']},{id:'pm',label:'After lunch',time:'13:00–17:00',order:3,covers:['pm']},{id:'fd',label:'Full day',time:'09:00–17:00',order:1,covers:['am','pm']},{id:'dn',label:'Dinner',time:'18:30–21:00',order:5,covers:['dn']}];
+const ROWS=SLOTS.filter(s=>s.id!=='fd');
+const MODES=['Flight','Kereta','Mobil'];
+const LSTAT={plan:'Rencana',booked:'Sudah booking',issued:'Tiket issued'};
+function legDetailLine(l){const d=l.details||{};const a=[];
+  const cn=[d.carrier,d.number].filter(Boolean).join(' '); if(cn)a.push(cn);
+  if(d.dep||d.arr)a.push(`${d.dep||'?'}–${d.arr||'?'}`);
+  if(d.depPt||d.arrPt)a.push(`${d.depPt||'?'} ke ${d.arrPt||'?'}`);
+  if(d.pnr)a.push('Booking '+d.pnr);
+  return a.join(', ');}
+const SIDX=Object.fromEntries(SLOTS.map(s=>[s.id,s]));
+const LEGT=[{id:'pagi',label:'Pagi',order:0},{id:'siang',label:'Siang (jam makan siang)',order:2},{id:'malam',label:'Sore / malam',order:4}];
+const LIDX=Object.fromEntries(LEGT.map(t=>[t.id,t]));
+const CITY={jkt:'Jakarta',sby:'Surabaya',smg:'Semarang'};
+const CSHORT={jkt:'JKT',sby:'SBY',smg:'SMG'};
+const PEOPLE=[
+ {id:'devi',name:'Devi',tracked:true},{id:'putri',name:'Putri',tracked:true},{id:'farhan',name:'Farhan',tracked:true},
+ {id:'tommy',name:'Tommy',tracked:true},{id:'yogi',name:'Yogi',tracked:true},{id:'halimah',name:'Halimah',tracked:true},
+ {id:'abigail',name:'Abigail',tracked:true},{id:'puspita',name:'Puspita',tracked:true},{id:'joseph',name:'Joseph',tracked:true},
+ {id:'richard',name:'Richard',tracked:false},{id:'cika',name:'Cika',tracked:false},{id:'eryan',name:'Eryan',tracked:false}
+];
+const PN=Object.fromEntries(PEOPLE.map(p=>[p.id,p]));
+const BASE=[
+ {id:'duakelinci',name:'Dua Kelinci',city:'sby',day:'mon',slot:'am',time:'',status:'green',people:['devi','richard','cika','eryan'],note:''},
+ {id:'onemed-ihsg',name:'Onemed – IHSG Surabaya Kota',city:'sby',day:'mon',slot:'pm',time:'',status:'yellow',people:['halimah','richard','cika','tommy'],note:''},
+ {id:'pakuwon',name:'Pakuwon – Jati',city:'sby',day:'tue',slot:'am',time:'',status:'yellow',people:['richard','devi','farhan'],note:'By Richard, Devi + Farhan'},
+ {id:'mikatasa',name:'Mikatasa',city:'sby',day:'tue',slot:'pm',time:'',status:'yellow',people:['abigail','tommy'],note:''},
+ {id:'siantar',name:'Siantar Top',city:'sby',day:'wed',slot:'am',time:'',status:'green',people:['abigail','yogi','richard','cika'],note:'Diskusi seputar AWS Manufacture use case dan melanjutkan diskusi di Singapore. Eryan not avail.'},
+ {id:'onemed-jmi',name:'Onemed – JMI – Sidoarjo',city:'sby',day:'wed',slot:'pm',time:'14:00',status:'yellow',people:['halimah','richard','cika','tommy'],note:''},
+ {id:'insera',name:'Insera – Sidoarjo',city:'sby',day:'thu',slot:'pm',time:'',status:'green',people:['abigail','richard','tommy'],note:'Diskusi MAP, Assessment Migration, Upgrade SAP, demo WEAST'},
+ {id:'erella',name:'Erella',city:'smg',day:'thu',slot:'fd',time:'',status:'green',people:['cika','puspita','tommy','farhan'],note:'Data Assessment + training Quick & Kiro'},
+ {id:'sidomuncul',name:'Sidomuncul',city:'smg',day:'fri',slot:'pm',time:'',status:'yellow',people:['puspita','joseph','cika','richard'],note:''}
+];
+const BASE_LEGS=[
+ {id:'l1',from:'jkt',to:'sby',mode:'Flight',day:'sun',time:'siang',people:['devi','putri','farhan','tommy','yogi','halimah'],given:true},
+ {id:'l2',from:'jkt',to:'sby',mode:'Flight',day:'tue',time:'pagi',people:['abigail'],given:true},
+ {id:'l3',from:'sby',to:'smg',mode:'Kereta',day:'wed',time:'malam',people:['devi','putri','farhan'],given:false},
+ {id:'l4',from:'jkt',to:'smg',mode:'Flight',day:'wed',time:'malam',people:['puspita','joseph'],given:false}
+];
+const clone=o=>JSON.parse(JSON.stringify(o));
+function proposedDefault(){
+  const p=clone(BASE);
+  const e=p.find(m=>m.id==='erella'); e.slot='am'; e.note='Data Assessment + training Quick & Kiro, dipadatkan ke sesi pagi (half-day)';
+  const s=p.find(m=>m.id==='sidomuncul'); s.day='thu'; s.slot='pm';
+  return p;
+}
+const KEY='ihub-trip-v2';
+let state={view:'proposed',proposed:proposedDefault(),legs:clone(BASE_LEGS),focus:null};
+try{const raw=localStorage.getItem(KEY); if(raw){const s=JSON.parse(raw); if(Array.isArray(s.proposed)) state.proposed=s.proposed; if(Array.isArray(s.legs)) state.legs=s.legs;}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({proposed:state.proposed,legs:state.legs}))}catch(e){}}
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const meetings=()=>state.view==='proposed'?state.proposed:BASE;
+const editable=()=>state.view==='proposed';
+const dayL=d=>DAYS[DIDX[d]].label;
+const slotL=s=>({am:'pagi',pm:'sore',fd:'full day',dn:'dinner'})[s];
+const overlap=(a,b)=>SIDX[a].covers.some(c=>SIDX[b].covers.includes(c));
+const sortM=a=>[...a].sort((x,y)=>DIDX[x.day]-DIDX[y.day]||SIDX[x.slot].order-SIDX[y.slot].order);
+
+function locAt(pid,dayId,order){
+  let loc='jkt',best=-1,target=DIDX[dayId]*10+order;
+  for(const l of state.legs){ if(!l.people.includes(pid)) continue;
+    const k=DIDX[l.day]*10+LIDX[l.time].order; if(k<target&&k>best){best=k;loc=l.to;} }
+  return loc;
+}
+
+function computeIssues(ms){
+  const issues=[]; const conf=new Set(); const confPair={};
+  for(const p of PEOPLE){
+    const mine=ms.filter(m=>m.people.includes(p.id));
+    for(const d of DAYS){
+      const dm=mine.filter(m=>m.day===d.id); if(dm.length<2) continue;
+      const cities=new Set(dm.map(m=>m.city));
+      const slotDup=dm.some((a,i)=>dm.some((b,j)=>j>i&&overlap(a.slot,b.slot)));
+      if(cities.size>1||slotDup){
+        dm.forEach(m=>{conf.add(m.id);(confPair[m.id]??=new Set()).add(p.id)});
+        const desc=sortM(dm).map(m=>`${m.name} (${CITY[m.city]}, ${slotL(m.slot)})`).join(' dan ');
+        issues.push({sev:'err',title:`${p.name} bentrok di hari ${d.label}`,
+          desc:cities.size>1?`Dijadwalkan di dua kota di hari yang sama: ${desc}.`:`Dua meeting di sesi yang sama: ${desc}.`,
+          fixes:dm.map(m=>({p:p.id,m:m.id,label:`Keluarkan ${p.name} dari ${m.name}`}))});
+      }
+    }
+  }
+  for(const p of PEOPLE.filter(x=>x.tracked)){
+    for(const m of sortM(ms.filter(m=>m.people.includes(p.id)))){
+      const loc=locAt(p.id,m.day,SIDX[m.slot].order);
+      if(loc!==m.city){
+        conf.add(m.id);(confPair[m.id]??=new Set()).add(p.id);
+        issues.push({sev:'warn',title:`Transport ${p.name} belum cocok`,
+          desc:`${p.name} ikut ${m.name} (${CITY[m.city]}, ${dayL(m.day)} ${slotL(m.slot)}), tapi menurut rencana transport masih di ${CITY[loc]}.`,
+          fixes:[{p:p.id,m:m.id,label:`Keluarkan ${p.name} dari ${m.name}`}]});
+      }
+    }
+  }
+  for(const p of PEOPLE.filter(x=>x.tracked)){
+    const mine=ms.filter(m=>m.people.includes(p.id));
+    if(!mine.length){issues.push({sev:'info',title:`${p.name} belum ada meeting`,desc:`${p.name} ikut perjalanan tapi belum tercantum di meeting manapun.`,fixes:[]});continue;}
+    for(const l of state.legs.filter(l=>l.people.includes(p.id))){
+      if(!mine.some(m=>m.city===l.to)) issues.push({sev:'info',title:`${p.name} ke ${CITY[l.to]} tanpa meeting`,desc:`Ada di rencana ${l.mode.toLowerCase()} ke ${CITY[l.to]}, tapi belum ada meeting di ${CITY[l.to]}.`,fixes:[]});
+    }
+  }
+  const order={err:0,warn:1,info:2};
+  issues.sort((a,b)=>order[a.sev]-order[b.sev]);
+  return {issues,conf,confPair};
+}
+
+function renderChanges(){
+  const out=[]; const P=state.proposed;
+  for(const b of BASE){
+    const m=P.find(x=>x.id===b.id);
+    if(!m){out.push(`<li><span class="tag del">Dihapus</span><span>${esc(b.name)} — ${dayL(b.day)} ${slotL(b.slot)}</span></li>`);continue;}
+    if(m.day!==b.day||m.slot!==b.slot||m.city!==b.city){out.push(`<li><span class="tag moved">Dipindah</span><span><b>${esc(m.name)}</b>: ${dayL(b.day)} ${slotL(b.slot)} (${CSHORT[b.city]}) ke ${dayL(m.day)} ${slotL(m.slot)} (${CSHORT[m.city]})</span></li>`);}
+    else if(m.name!==b.name||m.note!==b.note||m.time!==b.time||m.status!==b.status||[...m.people].sort().join()!==[...b.people].sort().join()){
+      const add=m.people.filter(x=>!b.people.includes(x)).map(x=>PN[x].name), rem=b.people.filter(x=>!m.people.includes(x)).map(x=>PN[x].name);
+      let d=[]; if(add.length) d.push('tambah '+add.join(', ')); if(rem.length) d.push('tanpa '+rem.join(', ')); if(m.name!==b.name||m.note!==b.note) d.push(esc(m.note||m.name));
+      out.push(`<li><span class="tag edit">Diubah</span><span><b>${esc(m.name)}</b>: ${d.join('; ')}</span></li>`);
+    }
+  }
+  for(const m of P.filter(x=>!BASE.some(b=>b.id===x.id))) out.push(`<li><span class="tag new">Baru</span><span><b>${esc(m.name)}</b>: ${dayL(m.day)} ${slotL(m.slot)} (${CSHORT[m.city]})</span></li>`);
+  $('#changes').innerHTML=out.join('')||'<li class="muted">Belum ada perubahan dari plan awal.</li>';
+}
+
+function renderStats(ms,iss){
+  const smgDays=[...new Set(ms.filter(m=>m.city==='smg').map(m=>m.day))].sort((a,b)=>DIDX[a]-DIDX[b]);
+  const last=sortM(ms).at(-1);
+  const errs=iss.issues.filter(i=>i.sev==='err').length, warns=iss.issues.filter(i=>i.sev==='warn').length;
+  $('#statTitle').textContent=state.view==='proposed'?'Ringkasan usulan':'Ringkasan plan awal';
+  $('#stats').innerHTML=`
+   <div class="stat"><b>${ms.length}</b><span>sesi meeting</span></div>
+   <div class="stat"><b>${smgDays.length} hari</b><span>di Semarang (${smgDays.map(dayL).join(', ')||'–'})</span></div>
+   <div class="stat"><b>${last?dayL(last.day):'–'}</b><span>meeting terakhir (${last?esc(last.name):'–'})</span></div>
+   <div class="stat ${errs+warns?'alert':''}"><b>${errs+warns}</b><span>bentrok / transport perlu dicek</span></div>`;
+}
+
+function renderBoard(ms,iss){
+  const f=state.focus; const hlDay=state.view==='proposed'?'thu':null;
+  let h='<div class="cell hd"></div>';
+  for(const d of DAYS) h+=`<div class="cell hd ${d.id===hlDay?'hl':''}">${d.label}${d.id==='sun'?'<small>Berangkat</small>':''}</div>`;
+  h+=`<div class="cell rowlab tr"><span class="city">Perjalanan</span></div>`;
+  for(const d of DAYS){
+    const ls=state.legs.filter(l=>l.day===d.id);
+    h+=`<div class="cell trcell ${d.id===hlDay?'day-hl':''}" data-day="${d.id}">${ls.map(l=>`<button class="leg ${f&&!l.people.includes(f)?'dim':''}" data-leg-id="${l.id}"><b>${l.mode} ${CSHORT[l.from]}–${CSHORT[l.to]}</b> · ${l.details&&l.details.dep?esc(l.details.dep):LIDX[l.time].label.split(' ')[0]}${l.details&&(l.details.carrier||l.details.number)?`<br><span class="muted">${esc([l.details.carrier,l.details.number].filter(Boolean).join(' '))}</span>`:''}<br>${l.people.map(p=>PN[p].name).join(', ')||'<i>belum ada orang</i>'}</button>`).join('')}<button class="addleg" data-add-leg="${d.id}">+ Perjalanan</button></div>`;
+  }
+  for(const c of ['sby','smg']){
+    for(const s of ROWS){
+      h+=`<div class="cell rowlab ${c}">${s.id==='am'?`<span class="city">${CITY[c]}</span>`:''}<span>${s.label}</span><small>${s.time}</small></div>`;
+      for(const d of DAYS){
+        const here=ms.filter(m=>m.city===c&&m.day===d.id&&SIDX[m.slot].covers.includes(s.id));
+        const canAdd=editable()&&d.id!=='sun';
+        h+=`<div class="cell slot ${canAdd?'empty-click':''} ${d.id===hlDay?'day-hl':''}" data-city="${c}" data-day="${d.id}" data-slot="${s.id}">`;
+        for(const m of here){
+          const cp=iss.confPair[m.id]||new Set();
+          const b=BASE.find(x=>x.id===m.id);
+          let flag='';
+          if(state.view==='proposed'){
+            if(!b) flag='<span class="tag new">Baru</span>';
+            else if(b.day!==m.day||b.slot!==m.slot||b.city!==m.city) flag='<span class="tag moved">Dipindah</span>';
+            else if(b.name!==m.name||b.note!==m.note||[...b.people].sort().join()!==[...m.people].sort().join()) flag='<span class="tag edit">Diubah</span>';
+          }
+          const cont=m.slot==='fd'&&s.id==='pm';
+          h+=`<button class="mt ${m.status==='yellow'?'yellow':''} ${cp.size?'conf':''} ${f&&!m.people.includes(f)?'dim':''} ${cont?'cont':''}" data-id="${m.id}" title="${esc(m.note)}">
+            <span class="nm">${esc(m.name)}${cont?' (lanjutan)':''}</span>${m.slot==='fd'?`<span class="tm">Full day 09:00–17:00</span>`:''}${m.time?`<span class="tm">${esc(m.time)}</span>`:''}
+            <span class="pp">${m.people.map(p=>`<span class="pc ${cp.has(p)?'x':''} ${f===p?'on':''}">${PN[p].name}</span>`).join('')}</span>
+            ${flag?`<span class="flags">${flag}</span>`:''}</button>`;
+        }
+        h+='</div>';
+      }
+    }
+  }
+  $('#board').innerHTML=h;
+}
+
+function renderIssues(iss){
+  if(!iss.issues.length){$('#issues').innerHTML='<li class="ok-msg">Tidak ada bentrok. Semua tim ada di kota yang benar.</li>';return;}
+  $('#issues').innerHTML=iss.issues.map(i=>`<li class="issue ${i.sev}"><div class="t">${esc(i.title)}</div><div class="d">${esc(i.desc)}</div>
+    ${editable()&&i.fixes.length?`<div class="fx">${i.fixes.map(x=>`<button data-fp="${x.p}" data-fm="${x.m}">${esc(x.label)}</button>`).join('')}</div>`:''}</li>`).join('');
+}
+
+function renderPeople(ms){
+  $('#people').innerHTML=PEOPLE.map(p=>{const n=ms.filter(m=>m.people.includes(p.id)).length;
+    return `<button class="person ${p.tracked?'':'ext'}" data-p="${p.id}" aria-pressed="${state.focus===p.id}">${p.name}<small>${n}</small></button>`}).join('');
+  const f=state.focus; if(!f){$('#itin').innerHTML='';return;}
+  const p=PN[f]; let h='';
+  for(const d of DAYS){
+    const ls=state.legs.filter(l=>l.day===d.id&&l.people.includes(f));
+    const dm=sortM(ms.filter(m=>m.day===d.id&&m.people.includes(f)));
+    if(!ls.length&&!dm.length) continue;
+    const items=[...ls.map(l=>({o:LIDX[l.time].order,t:`${l.mode} ${CITY[l.from]} ke ${CITY[l.to]} (${LIDX[l.time].label.toLowerCase()})${legDetailLine(l)?' — '+esc(legDetailLine(l)):''}`})),
+      ...dm.map(m=>({o:SIDX[m.slot].order,t:`<span class="loc ${m.city}">${CSHORT[m.city]}</span> ${SIDX[m.slot].time}${m.time?' ('+esc(m.time)+')':''}: <b>${esc(m.name)}</b>`}))].sort((a,b)=>a.o-b.o);
+    h+=`<div class="day"><b>${d.label}</b><div>${items.map(i=>`<div>${i.t}</div>`).join('')}</div></div>`;
+  }
+  if(!p.tracked) h+=`<p class="muted" style="font-size:13px;margin:6px 0 0">Transport ${p.name} belum ada di brief, jadi posisi kota tidak dicek otomatis.</p>`;
+  $('#itin').innerHTML=h||`<p class="muted">${p.name} belum ada jadwal.</p>`;
+}
+
+function renderLegs(){
+  const daySel=(l)=>`<select data-leg="${l.id}" data-k="day" aria-label="Hari">${DAYS.map(d=>`<option value="${d.id}" ${d.id===l.day?'selected':''}>${d.label}</option>`).join('')}</select>`;
+  const tSel=(l)=>`<select data-leg="${l.id}" data-k="time" aria-label="Waktu">${LEGT.map(t=>`<option value="${t.id}" ${t.id===l.time?'selected':''}>${t.label}</option>`).join('')}</select>`;
+  const legsSorted=[...state.legs].sort((a,b)=>DIDX[a.day]-DIDX[b.day]||LIDX[a.time].order-LIDX[b.time].order);
+  $('#legs').innerHTML=`<tr><th>Moda</th><th>Rute</th><th>Hari</th><th>Waktu</th><th>Tim</th><th>Detail</th><th>Status</th><th></th></tr>`+
+   legsSorted.map(l=>`<tr><td>${l.mode}</td><td>${CITY[l.from]} ke ${CITY[l.to]}</td><td>${daySel(l)}</td><td>${tSel(l)}</td><td>${l.people.map(p=>PN[p].name).join(', ')||'<span class="muted">Belum ada</span>'}</td><td>${legDetailLine(l)?esc(legDetailLine(l)):'<span class="muted">Belum ada</span>'}${l.details&&l.details.note?`<div class="muted" style="font-size:12.5px">${esc(l.details.note)}</div>`:''}</td><td><span class="src st-${(l.details&&l.details.status)||'plan'}">${LSTAT[(l.details&&l.details.status)||'plan']}</span>${l.given?'':' <span class="src prop">Hari usulan</span>'}</td><td><button class="btn sm" data-edit-leg="${l.id}">Ubah</button></td></tr>`).join('');
+  const ms=meetings();
+  $('#returns').innerHTML=`<tr><th>Nama</th><th>Meeting terakhir</th><th>Pulang dari</th><th>Paling cepat</th></tr>`+
+   PEOPLE.filter(p=>p.tracked).map(p=>{const mine=sortM(ms.filter(m=>m.people.includes(p.id))); const last=mine.at(-1);
+     if(!last) return `<tr><td>${p.name}</td><td class="muted">Belum ada</td><td>–</td><td>–</td></tr>`;
+     const loc=locAt(p.id,last.day,9);
+     const when=last.slot==='am'?`${dayL(last.day)} sore`:`${dayL(last.day)} malam / ${DAYS[DIDX[last.day]+1]?DAYS[DIDX[last.day]+1].label+' pagi':'besoknya'}`;
+     return `<tr><td>${p.name}</td><td>${esc(last.name)} (${dayL(last.day)} ${slotL(last.slot)})</td><td><span class="loc ${loc}">${CITY[loc]}</span></td><td>${when}</td></tr>`}).join('');
+}
+
+function render(){
+  const ms=meetings(); const iss=computeIssues(ms);
+  document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===state.view));
+  $('#roNote').textContent=state.view==='current'?'Plan awal hanya untuk dibaca. Pindah ke Usulan untuk mengubah.':'';
+  $('#addBtn').hidden=!editable(); $('#resetBtn').hidden=!editable();
+  renderStats(ms,iss); renderConclusion(ms,iss); renderBoard(ms,iss); renderPeople(ms); renderLegs();
+}
+
+function dayRange(ids){const idx=[...new Set(ids)].map(d=>DIDX[d]).sort((a,b)=>a-b);if(!idx.length)return '–';
+  const consec=idx.every((v,i)=>i===0||v===idx[i-1]+1);
+  return idx.length>1&&consec?`${DAYS[idx[0]].label}–${DAYS[idx.at(-1)].label}`:idx.map(i=>DAYS[i].label).join(', ');}
+const names=a=>a.map(p=>PN[p].name).join(', ');
+function buildConclusion(ms,iss){
+  const secs=[];
+  // Jadwal
+  const j=[];
+  for(const c of ['sby','smg']){const cm=sortM(ms.filter(m=>m.city===c)); if(!cm.length)continue;
+    j.push(`${CITY[c]} (${dayRange(cm.map(m=>m.day))}, ${cm.length} meeting): ${cm.map(m=>`${m.name} – ${dayL(m.day)} ${slotL(m.slot)}`).join('; ')}.`);}
+  const last=sortM(ms).at(-1);
+  if(last){let t=`Meeting terakhir: ${last.name}, ${dayL(last.day)} ${slotL(last.slot)}.`;
+    if(state.view==='proposed'){const bl=sortM(BASE).at(-1); const d=DIDX[bl.day]-DIDX[last.day];
+      if(d>0)t+=` Selesai ${d} hari lebih cepat dari plan awal (${dayL(bl.day)}).`; else if(d<0)t+=` Selesai ${-d} hari lebih lambat dari plan awal (${dayL(bl.day)}).`;}
+    j.push(t);}
+  if(!ms.length) j.push('Belum ada meeting.');
+  secs.push({h:'Jadwal',lines:j});
+  // Transport
+  const t=[]; const legs=[...state.legs].sort((a,b)=>DIDX[a.day]-DIDX[b.day]||LIDX[a.time].order-LIDX[b.time].order);
+  legs.forEach(l=>{const dl=legDetailLine(l);t.push(`${dayL(l.day)} ${LIDX[l.time].label.split(' ')[0].toLowerCase()}: ${l.mode} ${CITY[l.from]} ke ${CITY[l.to]}${dl?' ('+dl+')':''} – ${l.people.length?names(l.people):'belum ada orang'}.`);});
+  const done=legs.filter(l=>l.details&&l.details.status&&l.details.status!=='plan').length;
+  if(legs.length) t.push(`${done} dari ${legs.length} perjalanan sudah booking/issued.`); else t.push('Belum ada perjalanan.');
+  const tracked=PEOPLE.filter(p=>p.tracked);
+  const toSmg=tracked.filter(p=>state.legs.some(l=>l.to==='smg'&&l.people.includes(p.id)));
+  const sbyOnly=tracked.filter(p=>state.legs.some(l=>l.to==='sby'&&l.people.includes(p.id))&&!toSmg.includes(p));
+  if(sbyOnly.length) t.push(`Hanya di Surabaya: ${names(sbyOnly.map(p=>p.id))}.`);
+  if(toSmg.length) t.push(`Ke Semarang: ${names(toSmg.map(p=>p.id))}.`);
+  const noLeg=tracked.filter(p=>!state.legs.some(l=>l.people.includes(p.id)));
+  if(noLeg.length) t.push(`Belum ada perjalanan untuk: ${names(noLeg.map(p=>p.id))}.`);
+  secs.push({h:'Transport',lines:t});
+  // Kepulangan
+  const k=[]; const groups={}; const hasRet=[];
+  const endO={am:2,pm:4,fd:4,dn:6};
+  const entries=[];
+  for(const p of tracked){
+    const mine=ms.filter(m=>m.people.includes(p.id));
+    const out=state.legs.filter(l=>l.to!=='jkt'&&l.people.includes(p.id));
+    const keys=[...mine.map(m=>DIDX[m.day]*10+endO[m.slot]),...out.map(l=>DIDX[l.day]*10+LIDX[l.time].order)];
+    if(!keys.length) continue;
+    const lastK=Math.max(...keys);
+    if(state.legs.some(l=>l.to==='jkt'&&l.people.includes(p.id)&&DIDX[l.day]*10+LIDX[l.time].order>=lastK)){hasRet.push(p.id);continue;}
+    const loc=locAt(p.id,'fri',9); if(loc==='jkt')continue;
+    const di=Math.floor(lastK/10), o=lastK%10, nx=DAYS[di+1]?DAYS[di+1].label:'hari berikutnya';
+    const when=o<=2?`${DAYS[di].label} sore`:o===4?`${DAYS[di].label} malam / ${nx} pagi`:`${nx} pagi`;
+    entries.push({k:lastK,loc,when,p:p.id});
+  }
+  entries.sort((x,y)=>x.k-y.k).forEach(e=>{(groups[`Dari ${CITY[e.loc]}, paling cepat ${e.when}`]??=[]).push(e.p);});
+  if(hasRet.length) k.push(`Sudah ada perjalanan pulang: ${names(hasRet)}.`);
+  Object.entries(groups).forEach(([g,ps])=>k.push(`${g}: ${names(ps)}.`));
+  if(Object.keys(groups).length) k.push('Perjalanan pulang untuk nama di atas belum dibuat.');
+  if(!k.length) k.push('Belum ada data kepulangan.');
+  secs.push({h:'Kepulangan',lines:k});
+  // Outstanding
+  const o=iss.issues.filter(i=>i.sev!=='info').map(i=>`${i.title}: ${i.desc[0].toLowerCase()+i.desc.slice(1)}`);
+  secs.push({h:'Masih perlu dibereskan',lines:o.length?o:['Tidak ada bentrok jadwal maupun transport.'],clean:!o.length});
+  return secs;
+}
+function renderConclusion(ms,iss){
+  $('#concl').innerHTML=buildConclusion(ms,iss).map(s=>`<div><h3>${s.h}</h3><ul>${s.lines.map(l=>`<li class="${s.clean?'clean':''}">${esc(l)}</li>`).join('')}</ul></div>`).join('');
+}
+
+/* Events */
+document.querySelector('.seg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;state.view=b.dataset.view;render();});
+$('#board').addEventListener('click',e=>{
+  const al=e.target.closest('[data-add-leg]'); if(al){openLeg(null,al.dataset.addLeg);return;}
+  const lg=e.target.closest('.leg'); if(lg){openLeg(lg.dataset.legId);return;}
+  const mt=e.target.closest('.mt'); if(mt){openEdit(mt.dataset.id);return;}
+  const c=e.target.closest('.slot.empty-click'); if(c&&editable()) openEdit(null,{city:c.dataset.city,day:c.dataset.day,slot:c.dataset.slot});
+});
+false&&$('#issues')?.addEventListener('click',e=>{const b=e.target.closest('button[data-fp]');if(!b)return;
+  const m=state.proposed.find(x=>x.id===b.dataset.fm); if(m){m.people=m.people.filter(p=>p!==b.dataset.fp);save();render();toast(`${PN[b.dataset.fp].name} dikeluarkan dari ${m.name}`);}});
+$('#people').addEventListener('click',e=>{const b=e.target.closest('.person');if(!b)return;state.focus=state.focus===b.dataset.p?null:b.dataset.p;render();});
+$('#legs').addEventListener('change',e=>{const s=e.target.closest('select[data-leg]');if(!s)return;const l=state.legs.find(x=>x.id===s.dataset.leg);l[s.dataset.k]=s.value;save();render();});
+$('#addBtn').addEventListener('click',()=>openEdit(null,{city:'smg',day:'thu',slot:'pm'}));
+$('#resetBtn').addEventListener('click',()=>{if(!confirm('Kembalikan usulan dan transport ke versi awal?'))return;state.proposed=proposedDefault();state.legs=clone(BASE_LEGS);save();render();toast('Usulan di-reset');});
+
+/* Edit dialog */
+const dlg=$('#dlg'); let editingId=null;
+$('#fCity').innerHTML='<option value="sby">Surabaya</option><option value="smg">Semarang</option>';
+$('#fDay').innerHTML=DAYS.filter(d=>d.id!=='sun').map(d=>`<option value="${d.id}">${d.label}</option>`).join('');
+$('#fSlot').innerHTML=SLOTS.map(s=>`<option value="${s.id}">${s.label} (${s.time})</option>`).join('');
+$('#fPeople').innerHTML=PEOPLE.map(p=>`<label><input type="checkbox" value="${p.id}">${p.name}</label>`).join('');
+function openEdit(id,preset){
+  const ro=!editable();
+  const m=id?meetings().find(x=>x.id===id):{name:'',city:preset.city,day:preset.day,slot:preset.slot,time:'',status:'yellow',people:[],note:''};
+  editingId=id;
+  $('#dlgTitle').textContent=ro?m.name:(id?'Ubah meeting':'Tambah meeting');
+  $('#fName').value=m.name;$('#fCity').value=m.city;$('#fDay').value=m.day;$('#fSlot').value=m.slot;$('#fTime').value=m.time||'';$('#fStatus').value=m.status;$('#fNote').value=m.note||'';
+  document.querySelectorAll('#fPeople input').forEach(c=>c.checked=m.people.includes(c.value));
+  dlg.querySelectorAll('input,select,textarea').forEach(el=>el.disabled=ro);
+  $('#delBtn').hidden=ro||!id; dlg.querySelector('button[type=submit]').hidden=ro;
+  $('#cancelBtn').textContent=ro?'Tutup':'Batal';
+  dlg.showModal();
+}
+$('#cancelBtn').addEventListener('click',()=>dlg.close());
+$('#delBtn').addEventListener('click',()=>{const m=state.proposed.find(x=>x.id===editingId);if(!m||!confirm(`Hapus ${m.name} dari usulan?`))return;state.proposed=state.proposed.filter(x=>x.id!==editingId);save();dlg.close();render();toast('Meeting dihapus');});
+$('#mform').addEventListener('submit',e=>{
+  if(!editable())return;
+  const data={name:$('#fName').value.trim(),city:$('#fCity').value,day:$('#fDay').value,slot:$('#fSlot').value,time:$('#fTime').value.trim(),status:$('#fStatus').value,note:$('#fNote').value.trim(),
+    people:[...document.querySelectorAll('#fPeople input:checked')].map(c=>c.value)};
+  if(!data.name){e.preventDefault();return;}
+  if(editingId){Object.assign(state.proposed.find(x=>x.id===editingId),data);}
+  else state.proposed.push({id:'m'+Date.now(),...data});
+  save();render();toast('Tersimpan');
+});
+
+/* Leg dialog */
+const ldlg=$('#legDlg'); let editingLeg=null;
+$('#lMode').innerHTML=MODES.map(m=>`<option>${m}</option>`).join('');
+const cityOpts=Object.entries(CITY).map(([k,v])=>`<option value="${k}">${v}</option>`).join('');
+$('#lFrom').innerHTML=cityOpts; $('#lTo').innerHTML=cityOpts;
+$('#lDay').innerHTML=DAYS.map(d=>`<option value="${d.id}">${d.label}</option>`).join('');
+$('#lTime').innerHTML=LEGT.map(t=>`<option value="${t.id}">${t.label}</option>`).join('');
+$('#lPeople').innerHTML=PEOPLE.map(p=>`<label><input type="checkbox" value="${p.id}">${p.name}</label>`).join('');
+function openLeg(id,day){
+  const l=id?state.legs.find(x=>x.id===id):{mode:'Flight',from:'jkt',to:'sby',day:day||'sun',time:'pagi',people:[]};
+  editingLeg=id;
+  $('#legTitle').textContent=id?'Ubah perjalanan':'Tambah perjalanan';
+  $('#lMode').value=l.mode;$('#lFrom').value=l.from;$('#lTo').value=l.to;$('#lDay').value=l.day;$('#lTime').value=l.time;
+  document.querySelectorAll('#lPeople input').forEach(c=>c.checked=l.people.includes(c.value));
+  const dt=l.details||{};
+  [['lCarrier','carrier'],['lNumber','number'],['lPnr','pnr'],['lDep','dep'],['lArr','arr'],['lDepPt','depPt'],['lArrPt','arrPt'],['lNote','note']].forEach(([el,k])=>$('#'+el).value=dt[k]||'');
+  $('#lStatus').value=dt.status||'plan';
+  $('#lDel').hidden=!id; ldlg.showModal();
+}
+$('#addLegBtn').addEventListener('click',()=>openLeg(null));
+$('#addLegTop').addEventListener('click',()=>openLeg(null));
+$('#legs').addEventListener('click',e=>{const b=e.target.closest('[data-edit-leg]');if(b)openLeg(b.dataset.editLeg);});
+$('#lCancel').addEventListener('click',()=>ldlg.close());
+$('#lDel').addEventListener('click',()=>{if(!confirm('Hapus perjalanan ini?'))return;state.legs=state.legs.filter(x=>x.id!==editingLeg);save();ldlg.close();render();toast('Perjalanan dihapus');});
+$('#lform').addEventListener('submit',e=>{
+  const data={mode:$('#lMode').value,from:$('#lFrom').value,to:$('#lTo').value,day:$('#lDay').value,time:$('#lTime').value,
+    people:[...document.querySelectorAll('#lPeople input:checked')].map(c=>c.value),
+    details:{carrier:$('#lCarrier').value.trim(),number:$('#lNumber').value.trim(),pnr:$('#lPnr').value.trim(),dep:$('#lDep').value,arr:$('#lArr').value,
+      depPt:$('#lDepPt').value.trim(),arrPt:$('#lArrPt').value.trim(),status:$('#lStatus').value,note:$('#lNote').value.trim()}};
+  if(data.from===data.to){e.preventDefault();toast('Kota asal dan tujuan tidak boleh sama');return;}
+  if(editingLeg) Object.assign(state.legs.find(x=>x.id===editingLeg),data);
+  else state.legs.push({id:'l'+Date.now(),given:false,...data});
+  save();render();toast('Perjalanan tersimpan');
+});
+
+/* Copy summary */
+function summaryText(){
+  const ms=meetings(); const iss=computeIssues(ms);
+  let t=`Business trip follow-up Innovation Hub — Surabaya & Semarang\nVersi: ${state.view==='proposed'?'Usulan':'Plan awal'}\n`;
+  if(state.view==='proposed') t+=`Usulan: Erella half-day di Kamis pagi, Sidomuncul pindah ke Kamis sore, Semarang selesai Kamis.\n`;
+  t+='\nKESIMPULAN\n';
+  buildConclusion(ms,iss).forEach(sc=>{t+=`\n${sc.h}\n`;sc.lines.forEach(l=>t+=`- ${l}\n`);});
+  t+='\nJADWAL DETAIL\n';
+  for(const d of DAYS){
+    const ls=state.legs.filter(l=>l.day===d.id), dm=sortM(ms.filter(m=>m.day===d.id));
+    if(!ls.length&&!dm.length) continue;
+    t+=`\n${d.label}\n`;
+    ls.forEach(l=>{const dl=legDetailLine(l);t+=`- ${l.mode} ${CITY[l.from]} → ${CITY[l.to]} (${LIDX[l.time].label.toLowerCase()})${dl?' | '+dl:''}: ${l.people.map(p=>PN[p].name).join(', ')}\n`;if(l.details&&l.details.note)t+=`  Catatan: ${l.details.note}\n`;});
+    dm.forEach(m=>t+=`- ${CSHORT[m.city]} ${m.time||SIDX[m.slot].time} | ${m.name} (${m.people.map(p=>PN[p].name).join(', ')})${m.note?' — '+m.note:''}\n`);
+  }
+  const bad=iss.issues.filter(i=>i.sev!=='info');
+  return t;
+}
+$('#copyBtn').addEventListener('click',()=>{$('#copyOut').value=summaryText();$('#copyDlg').showModal();});
+$('#copyClose').addEventListener('click',()=>$('#copyDlg').close());
+$('#copyDo').addEventListener('click',async()=>{const ta=$('#copyOut');
+  try{await navigator.clipboard.writeText(ta.value);toast('Teks disalin');}
+  catch(e){ta.select();try{document.execCommand('copy');toast('Teks disalin');}catch(_){toast('Pilih teks lalu salin manual');}}});
+
+let tt; function toast(m){const el=$('#toast');el.textContent=m;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),1800);}
+render();
+</script>
+</body>
+</html>
