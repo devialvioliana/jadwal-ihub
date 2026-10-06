@@ -25,10 +25,10 @@
       "time": "",
       "status": "yellow",
       "people": [
+        "yogi",
         "halimah",
         "richard",
-        "cika",
-        "tommy"
+        "cika"
       ],
       "note": ""
     },
@@ -56,8 +56,8 @@
       "time": "",
       "status": "yellow",
       "people": [
-        "abigail",
-        "tommy"
+        "tommy",
+        "abigail"
       ],
       "note": ""
     },
@@ -70,10 +70,9 @@
       "time": "",
       "status": "green",
       "people": [
+        "tommy",
         "abigail",
-        "yogi",
-        "richard",
-        "cika"
+        "richard"
       ],
       "note": "Diskusi seputar AWS Manufacture use case dan melanjutkan diskusi di Singapore. Eryan not avail."
     },
@@ -81,15 +80,15 @@
       "id": "onemed-jmi",
       "name": "Onemed – JMI – Sidoarjo",
       "city": "sby",
-      "day": "wed",
+      "day": "tue",
       "slot": "pm",
       "time": "14:00",
       "status": "yellow",
       "people": [
+        "yogi",
         "halimah",
         "richard",
-        "cika",
-        "tommy"
+        "cika"
       ],
       "note": ""
     },
@@ -112,15 +111,15 @@
       "id": "erella",
       "name": "Erella",
       "city": "smg",
-      "day": "thu",
-      "slot": "am",
+      "day": "wed",
+      "slot": "fd",
       "time": "",
       "status": "green",
       "people": [
-        "cika",
+        "farhan",
+        "yogi",
         "puspita",
-        "tommy",
-        "farhan"
+        "cika"
       ],
       "note": "Data Assessment + training Quick & Kiro, dipadatkan ke sesi pagi (half-day)"
     },
@@ -135,8 +134,7 @@
       "people": [
         "puspita",
         "joseph",
-        "cika",
-        "richard"
+        "cika"
       ],
       "note": ""
     }
@@ -153,11 +151,21 @@
         "devi",
         "putri",
         "farhan",
-        "tommy",
         "yogi",
         "halimah"
       ],
-      "given": true
+      "given": true,
+      "details": {
+        "carrier": "",
+        "number": "",
+        "pnr": "",
+        "dep": "",
+        "arr": "",
+        "depPt": "",
+        "arrPt": "",
+        "status": "plan",
+        "note": ""
+      }
     },
     {
       "id": "l2",
@@ -167,37 +175,122 @@
       "day": "tue",
       "time": "pagi",
       "people": [
+        "tommy",
         "abigail"
       ],
-      "given": true
+      "given": true,
+      "details": {
+        "carrier": "",
+        "number": "",
+        "pnr": "",
+        "dep": "",
+        "arr": "",
+        "depPt": "",
+        "arrPt": "",
+        "status": "plan",
+        "note": ""
+      }
     },
     {
       "id": "l3",
       "from": "sby",
       "to": "smg",
       "mode": "Kereta",
-      "day": "wed",
+      "day": "tue",
       "time": "malam",
       "people": [
         "devi",
         "putri",
-        "farhan"
+        "farhan",
+        "yogi"
       ],
-      "given": false
+      "given": false,
+      "details": {
+        "carrier": "",
+        "number": "",
+        "pnr": "",
+        "dep": "",
+        "arr": "",
+        "depPt": "",
+        "arrPt": "",
+        "status": "plan",
+        "note": ""
+      }
     },
     {
       "id": "l4",
       "from": "jkt",
       "to": "smg",
       "mode": "Flight",
-      "day": "wed",
+      "day": "tue",
       "time": "malam",
       "people": [
         "puspita",
         "joseph"
       ],
-      "given": false
+      "given": false,
+      "details": {
+        "carrier": "",
+        "number": "",
+        "pnr": "",
+        "dep": "",
+        "arr": "",
+        "depPt": "",
+        "arrPt": "",
+        "status": "plan",
+        "note": ""
+      }
+    },
+    {
+      "id": "l1791288814186",
+      "given": false,
+      "mode": "Flight",
+      "from": "smg",
+      "to": "jkt",
+      "day": "thu",
+      "time": "malam",
+      "people": [
+        "puspita",
+        "joseph"
+      ],
+      "details": {
+        "carrier": "",
+        "number": "",
+        "pnr": "",
+        "dep": "",
+        "arr": "",
+        "depPt": "",
+        "arrPt": "",
+        "status": "plan",
+        "note": ""
+      }
+    },
+    {
+      "id": "l1791288835224",
+      "given": false,
+      "mode": "Flight",
+      "from": "smg",
+      "to": "jkt",
+      "day": "wed",
+      "time": "malam",
+      "people": [
+        "devi",
+        "putri",
+        "farhan",
+        "yogi"
+      ],
+      "details": {
+        "carrier": "",
+        "number": "",
+        "pnr": "",
+        "dep": "",
+        "arr": "",
+        "depPt": "",
+        "arrPt": "",
+        "status": "plan",
+        "note": ""
+      }
     }
   ],
-  "publishedAt": 1791288060213
+  "publishedAt": 1791288840438
 }
