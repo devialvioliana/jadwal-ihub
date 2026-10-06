@@ -194,10 +194,14 @@ textarea.out{width:100%;min-height:300px;font-size:12.5px;line-height:1.45;borde
     </div>
     <span class="ro-note" id="roNote"></span>
     <span class="spacer"></span>
+    <span class="ro-note" id="liveNote"></span>
+    <button class="btn" id="discardBtn" hidden>Lihat versi live</button>
+    <button class="btn primary" id="editToggle">Edit</button>
     <button class="btn" id="addBtn">Tambah meeting</button>
     <button class="btn" id="addLegTop">Tambah perjalanan</button>
     <button class="btn" id="copyBtn">Salin ringkasan</button>
     <button class="btn danger" id="resetBtn">Reset usulan</button>
+    <button class="btn primary" id="publishBtn">Publish</button>
   </div>
 
   <div class="board-wrap"><div class="board" id="board"></div></div>
@@ -297,6 +301,13 @@ textarea.out{width:100%;min-height:300px;font-size:12.5px;line-height:1.45;borde
   <div class="acts"><button class="btn" id="copyClose">Tutup</button><button class="btn primary" id="copyDo">Salin teks</button></div>
 </div></dialog>
 
+<dialog id="pubDlg"><div class="dlg">
+  <h2>Publish ke live</h2>
+  <p class="muted" style="margin:0;font-size:13.5px">Versi ini yang akan dilihat semua orang di link. Langkahnya: klik <b>Salin JSON</b>, lalu double-click file <b>&ldquo;Publish ke Live.command&rdquo;</b> di folder proyek. Sekitar 1 menit kemudian versi baru live di link yang sama.</p>
+  <textarea class="out" id="pubOut" readonly style="min-height:180px"></textarea>
+  <div class="acts"><button class="btn" id="pubClose">Tutup</button><button class="btn" id="pubDownload">Download data.json</button><button class="btn primary" id="pubCopy">Salin JSON</button></div>
+</div></dialog>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -349,14 +360,22 @@ function proposedDefault(){
   return p;
 }
 const KEY='ihub-trip-v2';
+const DATA_URL='data.json';
 let state={view:'proposed',proposed:proposedDefault(),legs:clone(BASE_LEGS),focus:null};
-try{const raw=localStorage.getItem(KEY); if(raw){const s=JSON.parse(raw); if(Array.isArray(s.proposed)) state.proposed=s.proposed; if(Array.isArray(s.legs)) state.legs=s.legs;}}catch(e){}
-function save(){try{localStorage.setItem(KEY,JSON.stringify({proposed:state.proposed,legs:state.legs}))}catch(e){}}
+let editMode=false, publishedAt=0, pollTimer=null;
+
+/* Shared data: data.json (versi publish) = yang dilihat semua orang.
+   localStorage = draft lokal editor (perubahan belum di-publish). */
+function readDraft(){try{const raw=localStorage.getItem(KEY);if(raw){const s=JSON.parse(raw);if(Array.isArray(s.proposed)&&Array.isArray(s.legs))return s;}}catch(e){}return null;}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({proposed:state.proposed,legs:state.legs,savedAt:Date.now()}))}catch(e){}}
+function hasDraft(){const d=readDraft();return !!(d&&d.savedAt&&d.savedAt>publishedAt);}
+function applyData(d){if(d&&Array.isArray(d.proposed)&&Array.isArray(d.legs)){state.proposed=d.proposed;state.legs=d.legs;if(d.publishedAt)publishedAt=d.publishedAt;return true;}return false;}
+async function fetchPublished(){try{const r=await fetch(DATA_URL+'?t='+Date.now(),{cache:'no-store'});if(!r.ok)return null;return await r.json();}catch(e){return null;}}
 
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const meetings=()=>state.view==='proposed'?state.proposed:BASE;
-const editable=()=>state.view==='proposed';
+const editable=()=>state.view==='proposed'&&editMode;
 const dayL=d=>DAYS[DIDX[d]].label;
 const slotL=s=>({am:'pagi',pm:'sore',fd:'full day',dn:'dinner'})[s];
 const overlap=(a,b)=>SIDX[a].covers.some(c=>SIDX[b].covers.includes(c));
@@ -499,8 +518,9 @@ function renderPeople(ms){
 }
 
 function renderLegs(){
-  const daySel=(l)=>`<select data-leg="${l.id}" data-k="day" aria-label="Hari">${DAYS.map(d=>`<option value="${d.id}" ${d.id===l.day?'selected':''}>${d.label}</option>`).join('')}</select>`;
-  const tSel=(l)=>`<select data-leg="${l.id}" data-k="time" aria-label="Waktu">${LEGT.map(t=>`<option value="${t.id}" ${t.id===l.time?'selected':''}>${t.label}</option>`).join('')}</select>`;
+  const dis=editable()?'':'disabled';
+  const daySel=(l)=>`<select data-leg="${l.id}" data-k="day" aria-label="Hari" ${dis}>${DAYS.map(d=>`<option value="${d.id}" ${d.id===l.day?'selected':''}>${d.label}</option>`).join('')}</select>`;
+  const tSel=(l)=>`<select data-leg="${l.id}" data-k="time" aria-label="Waktu" ${dis}>${LEGT.map(t=>`<option value="${t.id}" ${t.id===l.time?'selected':''}>${t.label}</option>`).join('')}</select>`;
   const legsSorted=[...state.legs].sort((a,b)=>DIDX[a.day]-DIDX[b.day]||LIDX[a.time].order-LIDX[b.time].order);
   $('#legs').innerHTML=`<tr><th>Moda</th><th>Rute</th><th>Hari</th><th>Waktu</th><th>Tim</th><th>Detail</th><th>Status</th><th></th></tr>`+
    legsSorted.map(l=>`<tr><td>${l.mode}</td><td>${CITY[l.from]} ke ${CITY[l.to]}</td><td>${daySel(l)}</td><td>${tSel(l)}</td><td>${l.people.map(p=>PN[p].name).join(', ')||'<span class="muted">Belum ada</span>'}</td><td>${legDetailLine(l)?esc(legDetailLine(l)):'<span class="muted">Belum ada</span>'}${l.details&&l.details.note?`<div class="muted" style="font-size:12.5px">${esc(l.details.note)}</div>`:''}</td><td><span class="src st-${(l.details&&l.details.status)||'plan'}">${LSTAT[(l.details&&l.details.status)||'plan']}</span>${l.given?'':' <span class="src prop">Hari usulan</span>'}</td><td><button class="btn sm" data-edit-leg="${l.id}">Ubah</button></td></tr>`).join('');
@@ -518,6 +538,12 @@ function render(){
   document.querySelectorAll('.seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===state.view));
   $('#roNote').textContent=state.view==='current'?'Plan awal hanya untuk dibaca. Pindah ke Usulan untuk mengubah.':'';
   $('#addBtn').hidden=!editable(); $('#resetBtn').hidden=!editable();
+  const _al=$('#addLegTop'); if(_al)_al.hidden=!editable();
+  const _al2=$('#addLegBtn'); if(_al2)_al2.hidden=!editable();
+  const _pb=$('#publishBtn'); if(_pb)_pb.hidden=!editable();
+  const _db=$('#discardBtn'); if(_db)_db.hidden=!hasDraft();
+  const _et=$('#editToggle'); if(_et){_et.textContent=editMode?'Selesai':'Edit';_et.classList.toggle('primary',!editMode);}
+  const _ln=$('#liveNote'); if(_ln)_ln.textContent=editMode?'● Mode edit':'● Live — update otomatis';
   renderStats(ms,iss); renderConclusion(ms,iss); renderBoard(ms,iss); renderPeople(ms); renderLegs();
 }
 
@@ -593,7 +619,7 @@ $('#board').addEventListener('click',e=>{
 false&&$('#issues')?.addEventListener('click',e=>{const b=e.target.closest('button[data-fp]');if(!b)return;
   const m=state.proposed.find(x=>x.id===b.dataset.fm); if(m){m.people=m.people.filter(p=>p!==b.dataset.fp);save();render();toast(`${PN[b.dataset.fp].name} dikeluarkan dari ${m.name}`);}});
 $('#people').addEventListener('click',e=>{const b=e.target.closest('.person');if(!b)return;state.focus=state.focus===b.dataset.p?null:b.dataset.p;render();});
-$('#legs').addEventListener('change',e=>{const s=e.target.closest('select[data-leg]');if(!s)return;const l=state.legs.find(x=>x.id===s.dataset.leg);l[s.dataset.k]=s.value;save();render();});
+$('#legs').addEventListener('change',e=>{if(!editable())return;const s=e.target.closest('select[data-leg]');if(!s)return;const l=state.legs.find(x=>x.id===s.dataset.leg);l[s.dataset.k]=s.value;save();render();});
 $('#addBtn').addEventListener('click',()=>openEdit(null,{city:'smg',day:'thu',slot:'pm'}));
 $('#resetBtn').addEventListener('click',()=>{if(!confirm('Kembalikan usulan dan transport ke versi awal?'))return;state.proposed=proposedDefault();state.legs=clone(BASE_LEGS);save();render();toast('Usulan di-reset');});
 
@@ -636,15 +662,18 @@ $('#lDay').innerHTML=DAYS.map(d=>`<option value="${d.id}">${d.label}</option>`).
 $('#lTime').innerHTML=LEGT.map(t=>`<option value="${t.id}">${t.label}</option>`).join('');
 $('#lPeople').innerHTML=PEOPLE.map(p=>`<label><input type="checkbox" value="${p.id}">${p.name}</label>`).join('');
 function openLeg(id,day){
+  const ro=!editable();
   const l=id?state.legs.find(x=>x.id===id):{mode:'Flight',from:'jkt',to:'sby',day:day||'sun',time:'pagi',people:[]};
   editingLeg=id;
-  $('#legTitle').textContent=id?'Ubah perjalanan':'Tambah perjalanan';
+  $('#legTitle').textContent=ro?(CITY[l.from]+' ke '+CITY[l.to]):(id?'Ubah perjalanan':'Tambah perjalanan');
   $('#lMode').value=l.mode;$('#lFrom').value=l.from;$('#lTo').value=l.to;$('#lDay').value=l.day;$('#lTime').value=l.time;
   document.querySelectorAll('#lPeople input').forEach(c=>c.checked=l.people.includes(c.value));
   const dt=l.details||{};
   [['lCarrier','carrier'],['lNumber','number'],['lPnr','pnr'],['lDep','dep'],['lArr','arr'],['lDepPt','depPt'],['lArrPt','arrPt'],['lNote','note']].forEach(([el,k])=>$('#'+el).value=dt[k]||'');
   $('#lStatus').value=dt.status||'plan';
-  $('#lDel').hidden=!id; ldlg.showModal();
+  ldlg.querySelectorAll('input,select,textarea').forEach(el=>el.disabled=ro);
+  $('#lDel').hidden=ro||!id; ldlg.querySelector('button[type=submit]').hidden=ro; $('#lCancel').textContent=ro?'Tutup':'Batal';
+  ldlg.showModal();
 }
 $('#addLegBtn').addEventListener('click',()=>openLeg(null));
 $('#addLegTop').addEventListener('click',()=>openLeg(null));
@@ -652,6 +681,7 @@ $('#legs').addEventListener('click',e=>{const b=e.target.closest('[data-edit-leg
 $('#lCancel').addEventListener('click',()=>ldlg.close());
 $('#lDel').addEventListener('click',()=>{if(!confirm('Hapus perjalanan ini?'))return;state.legs=state.legs.filter(x=>x.id!==editingLeg);save();ldlg.close();render();toast('Perjalanan dihapus');});
 $('#lform').addEventListener('submit',e=>{
+  if(!editable())return;
   const data={mode:$('#lMode').value,from:$('#lFrom').value,to:$('#lTo').value,day:$('#lDay').value,time:$('#lTime').value,
     people:[...document.querySelectorAll('#lPeople input:checked')].map(c=>c.value),
     details:{carrier:$('#lCarrier').value.trim(),number:$('#lNumber').value.trim(),pnr:$('#lPnr').value.trim(),dep:$('#lDep').value,arr:$('#lArr').value,
@@ -687,7 +717,19 @@ $('#copyDo').addEventListener('click',async()=>{const ta=$('#copyOut');
   catch(e){ta.select();try{document.execCommand('copy');toast('Teks disalin');}catch(_){toast('Pilih teks lalu salin manual');}}});
 
 let tt; function toast(m){const el=$('#toast');el.textContent=m;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),1800);}
-render();
+
+/* ====== Publish model: data.json + mode edit + tombol Publish + auto-refresh ====== */
+function setEditMode(on){editMode=on;if(on){state.view='proposed';const d=readDraft();if(d&&d.savedAt&&d.savedAt>=publishedAt){state.proposed=d.proposed;state.legs=d.legs;}}render();}
+$('#editToggle')&&$('#editToggle').addEventListener('click',()=>setEditMode(!editMode));
+$('#discardBtn')&&$('#discardBtn').addEventListener('click',async()=>{try{localStorage.removeItem(KEY);}catch(e){}const pub=await fetchPublished();if(!applyData(pub)){state.proposed=proposedDefault();state.legs=clone(BASE_LEGS);}render();toast('Kembali ke versi live');});
+$('#publishBtn')&&$('#publishBtn').addEventListener('click',()=>{const payload={proposed:state.proposed,legs:state.legs,publishedAt:Date.now()};$('#pubOut').value=JSON.stringify(payload,null,2);$('#pubDlg').showModal();});
+$('#pubClose')&&$('#pubClose').addEventListener('click',()=>$('#pubDlg').close());
+$('#pubDownload')&&$('#pubDownload').addEventListener('click',()=>{const b=new Blob([$('#pubOut').value],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='data.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000);});
+$('#pubCopy')&&$('#pubCopy').addEventListener('click',async()=>{const ta=$('#pubOut');try{await navigator.clipboard.writeText(ta.value);toast('JSON disalin — sekarang double-click "Publish ke Live.command"');}catch(e){ta.select();try{document.execCommand('copy');toast('JSON disalin');}catch(_){toast('Pilih teks lalu salin manual');}}});
+
+function startPolling(){if(pollTimer)clearInterval(pollTimer);pollTimer=setInterval(async()=>{if(editMode)return;const pub=await fetchPublished();if(pub&&pub.publishedAt&&pub.publishedAt>publishedAt){const d=readDraft();if(d&&d.savedAt&&d.savedAt>pub.publishedAt){publishedAt=pub.publishedAt;return;}const kf=state.focus,kv=state.view;applyData(pub);state.focus=kf;state.view=kv;render();toast('Jadwal diperbarui');}},60000);}
+async function init(){const pub=await fetchPublished();if(pub&&pub.publishedAt)publishedAt=pub.publishedAt;const draft=readDraft();if(draft&&draft.savedAt&&draft.savedAt>publishedAt){state.proposed=draft.proposed;state.legs=draft.legs;}else{applyData(pub);}render();startPolling();}
+init();
 </script>
 </body>
 </html>

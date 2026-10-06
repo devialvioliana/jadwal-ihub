@@ -1,0 +1,203 @@
+{
+  "proposed": [
+    {
+      "id": "duakelinci",
+      "name": "Dua Kelinci",
+      "city": "sby",
+      "day": "mon",
+      "slot": "am",
+      "time": "",
+      "status": "green",
+      "people": [
+        "devi",
+        "richard",
+        "cika",
+        "eryan"
+      ],
+      "note": ""
+    },
+    {
+      "id": "onemed-ihsg",
+      "name": "Onemed – IHSG Surabaya Kota",
+      "city": "sby",
+      "day": "mon",
+      "slot": "pm",
+      "time": "",
+      "status": "yellow",
+      "people": [
+        "halimah",
+        "richard",
+        "cika",
+        "tommy"
+      ],
+      "note": ""
+    },
+    {
+      "id": "pakuwon",
+      "name": "Pakuwon – Jati",
+      "city": "sby",
+      "day": "tue",
+      "slot": "am",
+      "time": "",
+      "status": "yellow",
+      "people": [
+        "richard",
+        "devi",
+        "farhan"
+      ],
+      "note": "By Richard, Devi + Farhan"
+    },
+    {
+      "id": "mikatasa",
+      "name": "Mikatasa",
+      "city": "sby",
+      "day": "tue",
+      "slot": "pm",
+      "time": "",
+      "status": "yellow",
+      "people": [
+        "abigail",
+        "tommy"
+      ],
+      "note": ""
+    },
+    {
+      "id": "siantar",
+      "name": "Siantar Top",
+      "city": "sby",
+      "day": "wed",
+      "slot": "am",
+      "time": "",
+      "status": "green",
+      "people": [
+        "abigail",
+        "yogi",
+        "richard",
+        "cika"
+      ],
+      "note": "Diskusi seputar AWS Manufacture use case dan melanjutkan diskusi di Singapore. Eryan not avail."
+    },
+    {
+      "id": "onemed-jmi",
+      "name": "Onemed – JMI – Sidoarjo",
+      "city": "sby",
+      "day": "wed",
+      "slot": "pm",
+      "time": "14:00",
+      "status": "yellow",
+      "people": [
+        "halimah",
+        "richard",
+        "cika",
+        "tommy"
+      ],
+      "note": ""
+    },
+    {
+      "id": "insera",
+      "name": "Insera – Sidoarjo",
+      "city": "sby",
+      "day": "thu",
+      "slot": "pm",
+      "time": "",
+      "status": "green",
+      "people": [
+        "abigail",
+        "richard",
+        "tommy"
+      ],
+      "note": "Diskusi MAP, Assessment Migration, Upgrade SAP, demo WEAST"
+    },
+    {
+      "id": "erella",
+      "name": "Erella",
+      "city": "smg",
+      "day": "thu",
+      "slot": "am",
+      "time": "",
+      "status": "green",
+      "people": [
+        "cika",
+        "puspita",
+        "tommy",
+        "farhan"
+      ],
+      "note": "Data Assessment + training Quick & Kiro, dipadatkan ke sesi pagi (half-day)"
+    },
+    {
+      "id": "sidomuncul",
+      "name": "Sidomuncul",
+      "city": "smg",
+      "day": "thu",
+      "slot": "pm",
+      "time": "",
+      "status": "yellow",
+      "people": [
+        "puspita",
+        "joseph",
+        "cika",
+        "richard"
+      ],
+      "note": ""
+    }
+  ],
+  "legs": [
+    {
+      "id": "l1",
+      "from": "jkt",
+      "to": "sby",
+      "mode": "Flight",
+      "day": "sun",
+      "time": "siang",
+      "people": [
+        "devi",
+        "putri",
+        "farhan",
+        "tommy",
+        "yogi",
+        "halimah"
+      ],
+      "given": true
+    },
+    {
+      "id": "l2",
+      "from": "jkt",
+      "to": "sby",
+      "mode": "Flight",
+      "day": "tue",
+      "time": "pagi",
+      "people": [
+        "abigail"
+      ],
+      "given": true
+    },
+    {
+      "id": "l3",
+      "from": "sby",
+      "to": "smg",
+      "mode": "Kereta",
+      "day": "wed",
+      "time": "malam",
+      "people": [
+        "devi",
+        "putri",
+        "farhan"
+      ],
+      "given": false
+    },
+    {
+      "id": "l4",
+      "from": "jkt",
+      "to": "smg",
+      "mode": "Flight",
+      "day": "wed",
+      "time": "malam",
+      "people": [
+        "puspita",
+        "joseph"
+      ],
+      "given": false
+    }
+  ],
+  "publishedAt": 1791288060213
+}
