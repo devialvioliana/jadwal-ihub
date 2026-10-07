@@ -10,6 +10,7 @@
       "status": "green",
       "people": [
         "devi",
+        "farhan",
         "richard",
         "cika",
         "eryan"
@@ -71,7 +72,7 @@
       "time": "",
       "status": "green",
       "people": [
-        "tommy",
+        "yogi",
         "abigail",
         "richard"
       ],
@@ -121,8 +122,8 @@
         "devi",
         "putri",
         "farhan",
-        "yogi",
         "puspita",
+        "joseph",
         "cika"
       ],
       "note": "Data Assessment + training Quick & Kiro, dipadatkan ke sesi pagi (half-day)"
@@ -205,8 +206,7 @@
       "people": [
         "devi",
         "putri",
-        "farhan",
-        "yogi"
+        "farhan"
       ],
       "given": false,
       "details": {
@@ -280,8 +280,7 @@
       "people": [
         "devi",
         "putri",
-        "farhan",
-        "yogi"
+        "farhan"
       ],
       "details": {
         "carrier": "",
@@ -325,8 +324,8 @@
       "mode": "Flight",
       "from": "sby",
       "to": "jkt",
-      "day": "tue",
-      "time": "pagi",
+      "day": "wed",
+      "time": "malam",
       "people": [
         "halimah"
       ],
@@ -343,5 +342,5 @@
       }
     }
   ],
-  "publishedAt": 1791344857317
+  "publishedAt": 1791347612495
 }
