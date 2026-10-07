@@ -88,6 +88,20 @@ h1{font-size:clamp(26px,3.6vw,40px);line-height:1.08;margin:0;font-weight:800;le
 .slot.empty-click:hover::after{content:"+ meeting";position:absolute;inset:auto 8px 6px auto;font-size:12px;color:var(--muted)}
 .day-hl{background:color-mix(in srgb,var(--focus) 5%,transparent)}
 
+/* Mobile per-day card view (dipakai saat layar kecil) */
+.board.mobile{display:block;min-width:0}
+.mday{border-bottom:1px solid var(--line);padding:12px 14px 8px}
+.mday:last-child{border-bottom:0}
+.mday.hl{box-shadow:inset 3px 0 0 var(--focus)}
+.mday-h{font-weight:800;font-size:15px;margin:0 0 10px}
+.msec{margin:0 0 12px}
+.msec:last-child{margin-bottom:4px}
+.msec-t{font-size:11.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.msec-t.sby{color:var(--sby)} .msec-t.smg{color:var(--smg)} .msec-t.tr{color:var(--travel)}
+.mnone{color:var(--muted);font-size:12.5px;padding:0 0 2px}
+.mobile-add{display:block;width:100%;border:1px dashed var(--line);background:transparent;color:var(--muted);border-radius:8px;padding:8px;font-size:12.5px;font-weight:600;text-align:left}
+.mobile-add:hover{border-color:var(--travel);color:var(--travel)}
+
 .mt{display:block;width:100%;text-align:left;border:1px solid var(--line);border-left:4px solid var(--ok);background:var(--surface);border-radius:8px;padding:7px 9px;margin:0 0 6px;font-size:13px;line-height:1.35}
 .mt.yellow{border-left-color:#E0B400}
 .mt:hover{border-color:var(--muted)}
@@ -166,6 +180,20 @@ textarea.out{width:100%;min-height:300px;font-size:12.5px;line-height:1.45;borde
 @media (max-width:900px){
   header.top,.pitch,.lower{grid-template-columns:1fr}
   .row3{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){
+  .wrap{padding:16px 12px 44px}
+  h1{font-size:clamp(22px,6vw,32px)}
+  .toolbar{gap:8px}
+  .toolbar .spacer{display:none}
+  .seg{flex:1 1 100%}
+  .seg button{flex:1}
+  .toolbar>.btn{flex:1 1 40%}
+  .stats{grid-template-columns:1fr 1fr}
+  .row3{grid-template-columns:1fr}
+  dialog{width:96vw}
+  .mt .nm{font-size:14px}
+  .person{padding:7px 12px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -494,6 +522,38 @@ function renderBoard(ms,iss){
   $('#board').innerHTML=h;
 }
 
+function isMobile(){try{return window.matchMedia('(max-width:760px)').matches;}catch(e){return window.innerWidth<=760;}}
+function renderBoardMobile(ms,iss){
+  const f=state.focus; const hlDay=state.view==='proposed'?'thu':null; const ed=editable();
+  const legBtn=l=>`<button class="leg ${f&&!l.people.includes(f)?'dim':''}" data-leg-id="${l.id}"><b>${l.mode} ${CSHORT[l.from]}–${CSHORT[l.to]}</b> · ${l.details&&l.details.dep?esc(l.details.dep):LIDX[l.time].label.split(' ')[0]}${l.details&&(l.details.carrier||l.details.number)?`<br><span class="muted">${esc([l.details.carrier,l.details.number].filter(Boolean).join(' '))}</span>`:''}<br>${l.people.map(p=>PN[p].name).join(', ')||'<i>belum ada orang</i>'}</button>`;
+  const mtBtn=m=>{
+    const cp=iss.confPair[m.id]||new Set(); const b=BASE.find(x=>x.id===m.id); let flag='';
+    if(state.view==='proposed'){
+      if(!b) flag='<span class="tag new">Baru</span>';
+      else if(b.day!==m.day||b.slot!==m.slot||b.city!==m.city) flag='<span class="tag moved">Dipindah</span>';
+      else if(b.name!==m.name||b.note!==m.note||[...b.people].sort().join()!==[...m.people].sort().join()) flag='<span class="tag edit">Diubah</span>';
+    }
+    return `<button class="mt ${m.status==='yellow'?'yellow':''} ${cp.size?'conf':''} ${f&&!m.people.includes(f)?'dim':''}" data-id="${m.id}" title="${esc(m.note)}"><span class="nm">${esc(m.name)}</span>${m.slot==='fd'?`<span class="tm">Full day 09:00–17:00</span>`:`<span class="tm">${SIDX[m.slot].label} · ${m.time?esc(m.time):SIDX[m.slot].time}</span>`}<span class="pp">${m.people.map(p=>`<span class="pc ${cp.has(p)?'x':''} ${f===p?'on':''}">${PN[p].name}</span>`).join('')}</span>${flag?`<span class="flags">${flag}</span>`:''}</button>`;
+  };
+  let h='';
+  for(const d of DAYS){
+    const ls=state.legs.filter(l=>l.day===d.id);
+    const dm=sortM(ms.filter(m=>m.day===d.id));
+    if(!ed && !ls.length && !dm.length) continue;
+    h+=`<section class="mday ${d.id===hlDay?'hl':''}"><header class="mday-h">${d.label}${d.id==='sun'?' · Berangkat':''}</header>`;
+    if(ls.length||ed){ h+=`<div class="msec"><div class="msec-t tr">Perjalanan</div>${ls.map(legBtn).join('')}${ed?`<button class="addleg" data-add-leg="${d.id}">+ Perjalanan</button>`:(ls.length?'':'<div class="mnone">—</div>')}</div>`; }
+    for(const c of ['sby','smg']){
+      const cm=dm.filter(m=>m.city===c);
+      const showAdd=ed&&d.id!=='sun';
+      if(!cm.length&&!showAdd) continue;
+      h+=`<div class="msec"><div class="msec-t ${c}">${CITY[c]}</div>${cm.map(mtBtn).join('')}${showAdd?`<button class="slot empty-click mobile-add" data-city="${c}" data-day="${d.id}" data-slot="pm">+ meeting</button>`:(cm.length?'':'<div class="mnone">—</div>')}</div>`;
+    }
+    h+=`</section>`;
+  }
+  if(!h) h='<p class="muted" style="padding:16px">Belum ada jadwal.</p>';
+  const board=$('#board'); board.classList.add('mobile'); board.innerHTML=h;
+}
+
 function renderIssues(iss){
   if(!iss.issues.length){$('#issues').innerHTML='<li class="ok-msg">Tidak ada bentrok. Semua tim ada di kota yang benar.</li>';return;}
   $('#issues').innerHTML=iss.issues.map(i=>`<li class="issue ${i.sev}"><div class="t">${esc(i.title)}</div><div class="d">${esc(i.desc)}</div>
@@ -544,7 +604,9 @@ function render(){
   const _db=$('#discardBtn'); if(_db)_db.hidden=!hasDraft();
   const _et=$('#editToggle'); if(_et){_et.textContent=editMode?'Selesai':'Edit';_et.classList.toggle('primary',!editMode);}
   const _ln=$('#liveNote'); if(_ln)_ln.textContent=editMode?'● Mode edit':'● Live — update otomatis';
-  renderStats(ms,iss); renderConclusion(ms,iss); renderBoard(ms,iss); renderPeople(ms); renderLegs();
+  renderStats(ms,iss); renderConclusion(ms,iss);
+  if(isMobile()){renderBoardMobile(ms,iss);} else {const _bd=$('#board'); if(_bd)_bd.classList.remove('mobile'); renderBoard(ms,iss);}
+  renderPeople(ms); renderLegs();
 }
 
 function dayRange(ids){const idx=[...new Set(ids)].map(d=>DIDX[d]).sort((a,b)=>a-b);if(!idx.length)return '–';
@@ -729,6 +791,7 @@ $('#pubCopy')&&$('#pubCopy').addEventListener('click',async()=>{const ta=$('#pub
 
 function startPolling(){if(pollTimer)clearInterval(pollTimer);pollTimer=setInterval(async()=>{if(editMode)return;const pub=await fetchPublished();if(pub&&pub.publishedAt&&pub.publishedAt>publishedAt){const d=readDraft();if(d&&d.savedAt&&d.savedAt>pub.publishedAt){publishedAt=pub.publishedAt;return;}const kf=state.focus,kv=state.view;applyData(pub);state.focus=kf;state.view=kv;render();toast('Jadwal diperbarui');}},60000);}
 async function init(){const pub=await fetchPublished();if(pub&&pub.publishedAt)publishedAt=pub.publishedAt;const draft=readDraft();if(draft&&draft.savedAt&&draft.savedAt>publishedAt){state.proposed=draft.proposed;state.legs=draft.legs;}else{applyData(pub);}render();startPolling();}
+try{window.matchMedia('(max-width:760px)').addEventListener('change',()=>render());}catch(e){}
 init();
 </script>
 </body>
