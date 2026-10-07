@@ -83,7 +83,7 @@
       "city": "sby",
       "day": "tue",
       "slot": "pm",
-      "time": "14:00",
+      "time": "",
       "status": "yellow",
       "people": [
         "putri",
@@ -294,7 +294,54 @@
         "status": "plan",
         "note": ""
       }
+    },
+    {
+      "id": "l1791344727666",
+      "given": false,
+      "mode": "Flight",
+      "from": "sby",
+      "to": "jkt",
+      "day": "thu",
+      "time": "malam",
+      "people": [
+        "tommy",
+        "abigail"
+      ],
+      "details": {
+        "carrier": "",
+        "number": "",
+        "pnr": "",
+        "dep": "",
+        "arr": "",
+        "depPt": "",
+        "arrPt": "",
+        "status": "plan",
+        "note": ""
+      }
+    },
+    {
+      "id": "l1791344819474",
+      "given": false,
+      "mode": "Flight",
+      "from": "sby",
+      "to": "jkt",
+      "day": "tue",
+      "time": "pagi",
+      "people": [
+        "halimah"
+      ],
+      "details": {
+        "carrier": "",
+        "number": "",
+        "pnr": "",
+        "dep": "",
+        "arr": "",
+        "depPt": "",
+        "arrPt": "",
+        "status": "plan",
+        "note": ""
+      }
     }
   ],
-  "publishedAt": 1791289280738
+  "publishedAt": 1791344857317
 }
