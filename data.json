@@ -304,29 +304,8 @@
       "time": "malam",
       "people": [
         "tommy",
-        "abigail"
-      ],
-      "details": {
-        "carrier": "",
-        "number": "",
-        "pnr": "",
-        "dep": "",
-        "arr": "",
-        "depPt": "",
-        "arrPt": "",
-        "status": "plan",
-        "note": ""
-      }
-    },
-    {
-      "id": "l1791344819474",
-      "given": false,
-      "mode": "Flight",
-      "from": "sby",
-      "to": "jkt",
-      "day": "wed",
-      "time": "malam",
-      "people": [
+        "abigail",
+        "yogi",
         "halimah"
       ],
       "details": {
@@ -342,5 +321,5 @@
       }
     }
   ],
-  "publishedAt": 1791347612495
+  "publishedAt": 1791531283021
 }
