@@ -123,25 +123,9 @@
         "putri",
         "farhan",
         "puspita",
-        "joseph",
         "cika"
       ],
       "note": "Data Assessment + training Quick & Kiro, dipadatkan ke sesi pagi (half-day)"
-    },
-    {
-      "id": "sidomuncul",
-      "name": "Sidomuncul",
-      "city": "smg",
-      "day": "thu",
-      "slot": "pm",
-      "time": "",
-      "status": "yellow",
-      "people": [
-        "puspita",
-        "joseph",
-        "cika"
-      ],
-      "note": ""
     }
   ],
   "legs": [
@@ -229,34 +213,9 @@
       "day": "tue",
       "time": "malam",
       "people": [
-        "puspita",
-        "joseph"
+        "puspita"
       ],
       "given": false,
-      "details": {
-        "carrier": "",
-        "number": "",
-        "pnr": "",
-        "dep": "",
-        "arr": "",
-        "depPt": "",
-        "arrPt": "",
-        "status": "plan",
-        "note": ""
-      }
-    },
-    {
-      "id": "l1791288814186",
-      "given": false,
-      "mode": "Flight",
-      "from": "smg",
-      "to": "jkt",
-      "day": "thu",
-      "time": "malam",
-      "people": [
-        "puspita",
-        "joseph"
-      ],
       "details": {
         "carrier": "",
         "number": "",
@@ -280,7 +239,8 @@
       "people": [
         "devi",
         "putri",
-        "farhan"
+        "farhan",
+        "puspita"
       ],
       "details": {
         "carrier": "",
@@ -321,5 +281,5 @@
       }
     }
   ],
-  "publishedAt": 1791531283021
+  "publishedAt": 1791789347860
 }
