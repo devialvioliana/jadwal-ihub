@@ -203,7 +203,7 @@ textarea.out{width:100%;min-height:300px;font-size:12.5px;line-height:1.45;borde
   <header class="top">
     <div>
       <h1>Business trip follow-up Innovation Hub</h1>
-      <p class="sub">Usulan jadwal dan tim untuk kunjungan Surabaya dan Semarang. Erella dibuat half-day di hari Kamis supaya Sidomuncul bisa meeting Kamis sore.</p>
+      <p class="sub">Usulan jadwal dan tim untuk kunjungan Surabaya dan Semarang · 18–22 Oktober 2026.</p>
     </div>
     <div class="route" aria-label="Rute perjalanan"><span class="c-jkt">Jakarta</span><i>›</i><span class="c-sby">Surabaya</span><i>›</i><span class="c-smg">Semarang</span></div>
   </header>
@@ -339,7 +339,7 @@ textarea.out{width:100%;min-height:300px;font-size:12.5px;line-height:1.45;borde
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-const DAYS=[{id:'sun',label:'Minggu'},{id:'mon',label:'Senin'},{id:'tue',label:'Selasa'},{id:'wed',label:'Rabu'},{id:'thu',label:'Kamis'},{id:'fri',label:'Jumat'}];
+const DAYS=[{id:'sun',label:'Minggu',date:'18 Okt'},{id:'mon',label:'Senin',date:'19 Okt'},{id:'tue',label:'Selasa',date:'20 Okt'},{id:'wed',label:'Rabu',date:'21 Okt'},{id:'thu',label:'Kamis',date:'22 Okt'},{id:'fri',label:'Jumat',date:'23 Okt'}];
 const DIDX=Object.fromEntries(DAYS.map((d,i)=>[d.id,i]));
 const SLOTS=[{id:'am',label:'Before lunch',time:'09:00–12:00',order:1,covers:['am']},{id:'pm',label:'After lunch',time:'13:00–17:00',order:3,covers:['pm']},{id:'fd',label:'Full day',time:'09:00–17:00',order:1,covers:['am','pm']},{id:'dn',label:'Dinner',time:'18:30–21:00',order:5,covers:['dn']}];
 const ROWS=SLOTS.filter(s=>s.id!=='fd');
@@ -487,7 +487,7 @@ function renderStats(ms,iss){
 function renderBoard(ms,iss){
   const f=state.focus; const hlDay=state.view==='proposed'?'thu':null;
   let h='<div class="cell hd"></div>';
-  for(const d of DAYS) h+=`<div class="cell hd ${d.id===hlDay?'hl':''}">${d.label}${d.id==='sun'?'<small>Berangkat</small>':''}</div>`;
+  for(const d of DAYS) h+=`<div class="cell hd ${d.id===hlDay?'hl':''}">${d.label}<small>${d.date}${d.id==='sun'?' · Berangkat':''}</small></div>`;
   h+=`<div class="cell rowlab tr"><span class="city">Perjalanan</span></div>`;
   for(const d of DAYS){
     const ls=state.legs.filter(l=>l.day===d.id);
@@ -540,7 +540,7 @@ function renderBoardMobile(ms,iss){
     const ls=state.legs.filter(l=>l.day===d.id);
     const dm=sortM(ms.filter(m=>m.day===d.id));
     if(!ed && !ls.length && !dm.length) continue;
-    h+=`<section class="mday ${d.id===hlDay?'hl':''}"><header class="mday-h">${d.label}${d.id==='sun'?' · Berangkat':''}</header>`;
+    h+=`<section class="mday ${d.id===hlDay?'hl':''}"><header class="mday-h">${d.label}, ${d.date}${d.id==='sun'?' · Berangkat':''}</header>`;
     if(ls.length||ed){ h+=`<div class="msec"><div class="msec-t tr">Perjalanan</div>${ls.map(legBtn).join('')}${ed?`<button class="addleg" data-add-leg="${d.id}">+ Perjalanan</button>`:(ls.length?'':'<div class="mnone">—</div>')}</div>`; }
     for(const c of ['sby','smg']){
       const cm=dm.filter(m=>m.city===c);
